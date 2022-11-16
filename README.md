@@ -36,7 +36,7 @@ The  `NewPostOfficeStorage` interface has several methods that perform `add`, `d
   Searches parcels using a predicate. This method does 
   not change the original storage.
 - `void updateOfficeNumber(Predicate<Box> predicate, int newOfficeNumber)`   
-  Updates the {@code office} field in each box of this storage.
+  Updates the `office` field in each box of this storage.
 
 Please, proceed to the `NewPostOfficeStorageImpl`
 that the implementor of `NewPostOfficeStorage` interface.
