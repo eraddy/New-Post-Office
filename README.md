@@ -1,9 +1,9 @@
-# New Post storage service
+# New Post Office Storage
  
 The purpose of this exercise is to work with List implementations, add/delete elements, and iterate over a collection to perform operations on each element.
 
 
-Duration - **1 hour**
+Duration: **1 hour**
 
 
 ## Description
