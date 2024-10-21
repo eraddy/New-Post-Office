@@ -93,33 +93,69 @@ public class NewPostOfficeStorageImpl implements NewPostOfficeStorage {
 
     @Override
     public List<Box> getAllWeightLessThan(double weight) {
-        if (weight <= 0)
-        {
-            throw new IllegalArgumentException();
+        if (weight <= 0) {
+            throw new IllegalArgumentException("Weight must be greater than zero");
         }
-        Predicate<Box> p = box -> box.getWeight() < weight;
-        return searchBoxes(p);
+        return searchBoxes(new WeightLessThanPredicate(weight));
+    }
+    
+    // Predicate implementation as a private class
+    private static class WeightLessThanPredicate implements Predicate<Box> {
+        private final double weight;
+    
+        public WeightLessThanPredicate(double weight) {
+            this.weight = weight;
+        }
+    
+        @Override
+        public boolean test(Box box) {
+            return box.getWeight() < weight;
+        }
     }
 
     @Override
     public List<Box> getAllCostGreaterThan(BigDecimal cost) { 
-        if (cost.compareTo(BigDecimal.ZERO) < 0)
-        {
-            throw new IllegalArgumentException();
-        }
-        Predicate<Box> p = box -> box.getCost().compareTo(cost) > 0;
-        return searchBoxes(p);
+        Objects.requireNonNull(cost, "Cost cannot be null");
+    if (cost.compareTo(BigDecimal.ZERO) < 0) {
+        throw new IllegalArgumentException("Cost must be greater than or equal to zero");
+    }
+    return searchBoxes(new CostGreaterThanPredicate(cost));
+}
+
+// Predicate implementation as a private class
+private static class CostGreaterThanPredicate implements Predicate<Box> {
+    private final BigDecimal cost;
+
+    public CostGreaterThanPredicate(BigDecimal cost) {
+        this.cost = cost;
+    }
+
+    @Override
+    public boolean test(Box box) {
+        return box.getCost().compareTo(cost) > 0;
+    }
     }
 
     @Override
     public List<Box> getAllVolumeGreaterOrEqual(double volume) {
-        // place your code here
-        if(volume < 0)
-        {
-            throw new IllegalArgumentException();
+        if (volume < 0) {
+            throw new IllegalArgumentException("Volume must be greater than or equal to zero");
         }
-        Predicate<Box> p = box -> box.getVolume() >= volume;
-        return searchBoxes(p);
+        return searchBoxes(new VolumeGreaterOrEqualPredicate(volume));
+    }
+    
+    // Predicate implementation as a private class
+    private static class VolumeGreaterOrEqualPredicate implements Predicate<Box> {
+        private final double volume;
+    
+        public VolumeGreaterOrEqualPredicate(double volume) {
+            this.volume = volume;
+        }
+    
+        @Override
+        public boolean test(Box box) {
+            return box.getVolume() >= volume;
+        }
     }
 
     @Override
@@ -145,7 +181,7 @@ public class NewPostOfficeStorageImpl implements NewPostOfficeStorage {
         if (predicate == null || newOfficeNumber < 0) {
             throw new NullPointerException("Predicate cannot be null and new office number must be non-negative");
         }
-        for (Box b : parcels) { // You can use a for-each loop directly.
+        for (Box b : parcels) { 
             if (predicate.test(b)) {
                 b.setOfficeNumber(newOfficeNumber);
             }
